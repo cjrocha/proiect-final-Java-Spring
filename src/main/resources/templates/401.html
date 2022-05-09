@@ -8,13 +8,13 @@
     <meta name="description" content="UnPont Development - Product Comparator">
     <meta name="author" content="@UnPont Development 2022">
     <link rel="icon" th:href="@{/media/unpont-icon.ico}">
-    <title>UnPont Development - Access Denied</title>
+    <title>UnPont Development - Upps</title>
 </head>
 <body>
 <div layout:fragment="content" class="container text-center" >
     <div class="starter-template">
         <h1>Access is denied</h1>
-        <div th:inline="text">Hello '[[${#httpServletRequest.remoteUser}]]', you do not have permission to access this page.</div>
+        <div th:inline="text">Salutare '[[${#httpServletRequest.remoteUser}]]', ne pare rau. dar nu esti autorizat sa vezi continutul acesta!</div>
     </div>
 </div>
 </body>

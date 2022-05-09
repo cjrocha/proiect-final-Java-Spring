@@ -14,8 +14,9 @@
 <div layout:fragment="content" class="container text-center" >
     <!--<h1 th:text="|${httpStatus} - ${httpStatus.reasonPhrase}|">404</h1>-->
     <h1 th:if="${errorMessage}" th:utext="${errorMessage}">Error java.lang.NullPointerException</h1>
-    <h1 th:if="!${errorMessage}">404 - Page does not exist</h1>
-    <a href="index.html" th:href="@{/index}">Back to Home Page</a>
+    <h1 th:if="!${errorMessage}">Hmm ......</h1>
+    <h2>Pagina pe care o cauti nu exista!</h2>
+    <a href="/" th:href="@{/}">Inapoi la pagina de pronire</a>
 </div>
 </body>
 </html>

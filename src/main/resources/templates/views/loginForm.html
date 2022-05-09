@@ -7,13 +7,13 @@
     <meta name="description" content="UnPont Development - Product Comparator">
     <meta name="author" content="@UnPont Development 2022">
     <link rel="icon" th:href="@{/media/unpont-icon.ico}">
-    <title>Login Form</title>
+    <title>UnPont Developemnent - Login Form</title>
 </head>
 <body>
 
 <div layout:fragment="content" class="container">
     <div class="simple-login-container col-md-4 offset-md-4">
-        <h2>Login Form</h2>
+        <h2>Formular de Login</h2>
         <form th:action="@{/login}" method="post">
             <fieldset>
                 <div class="form-group">
@@ -22,7 +22,7 @@
 
                 </div>
                 <div class="form-group">
-                    <label for="password" class="form-control-label">Password</label> <input
+                    <label for="password" class="form-control-label">Parola</label> <input
                         type="password" class="form-control"
                         id="password" name="password"/>
                 </div>
@@ -32,7 +32,7 @@
                         <input type="submit" class="btn btn-lg btn-success btn-block" value="Login">
                     </div>
                     <div class="col-xs-6 col-sm-6 col-md-6  form-group">
-                        <a href="/register" class="btn btn-lg btn-primary btn-block">Register</a>
+                        <a href="/register" class="btn btn-lg btn-primary btn-block">Inregistreaza-te</a>
                     </div>
                 </div>
             </fieldset>

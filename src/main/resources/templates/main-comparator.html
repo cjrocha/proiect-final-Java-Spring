@@ -11,6 +11,12 @@
     <title>UnPont Comparator</title>
 </head>
 <body>
+<div sec:authorize="!isAuthenticated()"layout:fragment="content" class="container text-center" >
+    <main role="main" class="container">
+    <h2>Pentru a accesa aceasta pagina trebuie sa fi inregistrat!</h2>
+    <h3>Acceseaza pagina de <a href="/login">login</a> sau pagina de <a href="/register">inregistrare</a>, daca nu esti inca membru.</h3>
+    </main>
+</div>
 <div sec:authorize="isAuthenticated()"layout:fragment="content" class="container text-center" >
     <main role="main" class="container">
         <h2>Formular de cautare</h2>
