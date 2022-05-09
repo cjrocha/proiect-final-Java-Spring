@@ -1,0 +1,21 @@
+<!DOCTYPE HTML>
+<html xmlns:layout="http://www.w3.org/1999/xhtml" xmlns:th="http://www.springframework.org/schema/data/jaxb"
+      xmlns:sec="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{fragments/main_layout}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="UnPont Development - Product Comparator">
+    <meta name="author" content="@UnPont Development 2022">
+    <link rel="icon" th:href="@{/media/unpont-icon.ico}">
+    <title>UnPont Development - Error Page</title>
+</head>
+<body>
+<div layout:fragment="content" class="container text-center" >
+    <!--<h1 th:text="|${httpStatus} - ${httpStatus.reasonPhrase}|">404</h1>-->
+    <h1 th:if="${errorMessage}" th:utext="${errorMessage}">Error java.lang.NullPointerException</h1>
+    <h1 th:if="!${errorMessage}">404 - Page does not exist</h1>
+    <a href="index.html" th:href="@{/index}">Back to Home Page</a>
+</div>
+</body>
+</html>
