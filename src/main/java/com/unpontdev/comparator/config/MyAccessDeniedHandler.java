@@ -29,7 +29,7 @@ public class MyAccessDeniedHandler implements AccessDeniedHandler {
             logger.info(String.format("User '%s' attempted to access the protected URL: %s", auth.getName(), httpServletRequest.getRequestURI()));
         }
 
-        httpServletResponse.sendRedirect(httpServletRequest.getContextPath() + "/401");
+        httpServletResponse.sendRedirect(httpServletRequest.getContextPath() + "/not_found");
 
     }
 }

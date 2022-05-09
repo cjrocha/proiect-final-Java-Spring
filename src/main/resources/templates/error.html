@@ -15,8 +15,9 @@
     <!--<h1 th:text="|${httpStatus} - ${httpStatus.reasonPhrase}|">404</h1>-->
     <h1 th:if="${errorMessage}" th:utext="${errorMessage}">Error java.lang.NullPointerException</h1>
     <h1 th:if="!${errorMessage}">Hmm ......</h1>
-    <h2>Pagina pe care o cauti nu exista!</h2>
-    <a href="/" th:href="@{/}">Inapoi la pagina de pronire</a>
+    <img src="http://localhost:8085/media/error.jpg" alt="Error page">
+    <h2>Ceva nu a mers! <br />Te rugam intoarce-te la pagina anterioara<br /> sau mai incearca o data.</h2>
+    <a href="/" th:href="@{/}">Inapoi la pagina de pornire</a>
 </div>
 </body>
 </html>

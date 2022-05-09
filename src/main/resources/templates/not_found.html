@@ -8,13 +8,14 @@
     <meta name="description" content="UnPont Development - Product Comparator">
     <meta name="author" content="@UnPont Development 2022">
     <link rel="icon" th:href="@{/media/unpont-icon.ico}">
-    <title>UnPont Development - Upps</title>
+    <title>UnPont Development - Pagina Inexistenta</title>
 </head>
 <body>
 <div layout:fragment="content" class="container text-center" >
     <div class="starter-template">
-        <h1>Access is denied</h1>
-        <div th:inline="text">Salutare '[[${#httpServletRequest.remoteUser}]]', ne pare rau. dar nu esti autorizat sa vezi continutul acesta!</div>
+        <h1>Upps!!!</h1>
+        <div th:inline="text">Salutare '[[${#httpServletRequest.remoteUser}]]', ne pare rau. dar pagina care incerci sa o accesezi nu exista!</div>
+        <a href="/" th:href="@{/}">Inapoi la pagina de pornire</a>
     </div>
 </div>
 </body>
