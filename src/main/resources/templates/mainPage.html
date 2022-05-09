@@ -1,0 +1,37 @@
+<!DOCTYPE HTML>
+<html xmlns:layout="http://www.w3.org/1999/xhtml" xmlns:th="http://www.springframework.org/schema/data/jaxb"
+      xmlns:sec="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{fragments/main_layout}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="UnPont Development - Product Comparator">
+    <meta name="author" content="@UnPont Development 2022">
+    <link rel="icon" th:href="@{/media/unpont-icon.ico}">
+    <title>User Dashboard</title>
+</head>
+<body>
+<div layout:fragment="content" class="container text-center" >
+    <main role="main" class="container">
+        <div class="jumbotron">
+            <p Date example; th:text="${date}"></p>
+            <h1>Contul tau</h1>
+            <p class="lead"><span sec:authorize="isAuthenticated()" th:text="${#authentication.getPrincipal().getUsername()}"></span>,</p>
+            <p Message example; th:text="${message}"></p>
+            <!-- <p sec:authorize="isAuthenticated()">Username :<span sec:authorize="isAuthenticated()" th:text="${#authentication.getPrincipal().getUsername()}"></span></p> -->
+            <div class="memberInformation">
+                <header> Informatiile Tale</header>
+                <p>&nbsp;</p>
+                <p sec:authorize="isAuthenticated()">Prenume : <span sec:authorize="isAuthenticated()" th:text="${members.firstName}"></span></p>
+                <p sec:authorize="isAuthenticated()">Nume : <span sec:authorize="isAuthenticated()" th:text="${members.lastName}"></span></p>
+                <p sec:authorize="isAuthenticated()">Adresa Email : <span sec:authorize="isAuthenticated()" th:text="${members.email}"></span></p>
+            </div>
+            <a sec:authorize="!isAuthenticated()" class="btn btn-lg btn-primary" href="/register" role="button">Register &raquo;</a>
+            <a sec:authorize="!isAuthenticated()" class="btn btn-lg btn-primary" href="/login" role="button">Login &raquo;</a>
+            <a sec:authorize="isAuthenticated()" class="btn btn-lg btn-primary" href="/logout" role="button">&raquo;Logout </a>
+            <a sec:authorize="isAuthenticated()" class="btn btn-lg btn-primary" href="/main-comparator" role="button">Comparator &raquo;</a>
+        </div>
+    </main>
+</div>
+</body>
+</html>
