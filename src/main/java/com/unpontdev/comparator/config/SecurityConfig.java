@@ -1,5 +1,6 @@
 package com.unpontdev.comparator.config;
 
+import com.unpontdev.comparator.controler.ErrorController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +18,7 @@ import javax.sql.DataSource;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private MyAccessDeniedHandler accessDeniedHandler;
+    private ErrorController errorController;
 
     @Autowired
     private DataSource dataSource;
@@ -51,6 +52,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout()
                 .logoutSuccessUrl("/")
                 .and()
-                .exceptionHandling().accessDeniedHandler(accessDeniedHandler);
+                .exceptionHandling().accessDeniedHandler(errorController);
     }
 }

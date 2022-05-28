@@ -29,6 +29,16 @@ public class Member {
             @JoinColumn(name = "ROLE_NAME", referencedColumnName = "name") })
     private List<Role> role;
 
+    public Member(String email, String firstName, String lastName, String password ) {
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.password = password;
+    }
+
+    public Member() {
+    }
+
     public String getEmail() {
         return email;
     }
@@ -67,15 +77,5 @@ public class Member {
 
     public void setRole(List<Role> role) {
         this.role = role;
-    }
-
-    public Member(String email, String firstName, String lastName, String password ) {
-        this.email = email;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.password = password;
-    }
-
-    public Member() {
     }
 }

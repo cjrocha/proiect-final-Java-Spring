@@ -14,6 +14,13 @@ public class Role {
     @ManyToMany(mappedBy = "role")
     private List<Member> members;
 
+    public Role(String name) {
+        this.name = name;
+    }
+
+    public Role() {
+    }
+
     public String getName() {
         return name;
     }
@@ -30,10 +37,5 @@ public class Role {
         this.members = members;
     }
 
-    public Role(String name) {
-        this.name = name;
-    }
 
-    public Role() {
-    }
 }
