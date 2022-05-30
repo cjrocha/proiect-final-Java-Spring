@@ -9,60 +9,8 @@
     <meta name="author" content="@UnPont Development 2022">
     <link rel="icon" th:href="@{/media/unpont-icon.ico}">
     <title>UnPont Comparator</title>
-<!--    <style>
-		.loader {
-			display: none;
-			top: 50%;
-			left: 50%;
-			position: absolute;
-			transform: translate(-50%, -50%);
-			text-align: center;
-			}
-
-		.loading {
-			border: 20px solid #ccc;
-			width: 120px;
-			height: 120px;
-			border-radius: 50%;
-			border-top-color: #1ecd97;
-			border-left-color: #1ecd97;
-			text-align: center;
-			animation: spin 2s infinite ease-in;
-		}
-
-		@keyframes spin {
-			0% {transform: rotate(0deg);}
-			100% {transform: rotate(360deg);}
-		}
-	</style>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script type="text/javascript">
-	var myVar;
-	function showLoader() {
-		document.getElementsByClassName("loader")[0].style.display = "block";
-		myVar = setTimeout(spinner, 10000);
-	}
-    function spinner() {
-        document.getElementsByClassName("loader")[0].style.display = "none";
-		document.getElementsByClassName("ready")[0].style.display = "block";
-    }
-    </script>
-
-    <script type="text/javascript">
-    function setImageVisible(id, visible) {
-        var img = document.getElementById(id);
-        img.style.display = (block ? 'display' : 'none');
-    }
-    </script>
--->
 </head>
 <body>
-<div sec:authorize="!isAuthenticated()"layout:fragment="content" class="container text-center" >
-    <main role="main" class="container">
-    <h2>Pentru a accesa aceasta pagina trebuie sa fi inregistrat!</h2>
-    <h3>Acceseaza pagina de <a href="/login">login</a> sau pagina de <a href="/register">inregistrare</a>, daca nu esti inca membru.</h3>
-    </main>
-</div>
 <div sec:authorize="isAuthenticated()"layout:fragment="content" class="container text-center" >
     <main role="main" class="container">
         <div class="header clearfix">
@@ -137,80 +85,30 @@
                             </div>
                         </div>
                     </div>
-                    <button id="cauta" type="submit" class="btn btn-primary" value="cauta">Cauta</button>                </form>
+                    <button id="cauta" type="submit" class="btn btn-primary" value="cauta">Cauta</button>
+                </form>
             </div>
         </div>
-        <!--Se afiseaza dupa ce formularul este trimis
-        <div>&nbsp;</div>
-        <div>&nbsp;</div>
-        <div th:if="${keyword} != null and ${keyword} != ' '">
-            <p>Tocmai am inregistrat cerea ta! Ai solicitat cautarea a: "<span th:text="${keyword}"></span>"<br />
-                In urmatoarele siteuri:<br/>
-                <span th:if="${altex} == true">altex.ro<br /></span>
-                <span th:if="${flanco} == true">flanco.ro<br /></span>
-                <span th:if="${emag} == true">emag.ro<br /></span>
-                <span th:if="${vivre} == true">vivre.ro</span>
-            </p>
-            <div class="loader justify-content-center" id="loader">
-                <img src="http://localhost:8085/media/ajax-loader.gif">
+        <p>&nbsp;</p>
+        <p>&nbsp;</p>
+        <div class="row h-100 justify-content-center align-items-center p-3 mb-2 bg-warning text-dark">
+            <div class="text">
+                <h4>In cazul in care esti grabit sau nu vrei sa astepti pana motoarele noastre de cautare isi fac treaba<br />
+                si vrei sa consulti datele produselor ce se afla in baza noastra de date facand o filtrare dupa un cuvant cheie</h4>
+                <p><strong>Te putem ajuta cu acest motor de cautare in baza de date proprie:</strong><br />
+                te rugam introdu un cuvant (sau mai multe) semnificativ pentru ceea ce cauti in campul de mai jos:</p>
             </div>
+            <form action="/search-results" method="get">
+                <div class="row mb-3">
+                    <label for="cheie-cautare" class="col-sm-2 col-form-label"><strong>Caut: </strong></label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="cheie-cautare" placeholder="Ce cauti? Fii cat mai specific!" th:name="search-keyword" required>
+                    </div>
+                </div>
+                <button id="cheiecautare" type="submit" class="btn btn-primary" value="cautakey">Caut acum!</button>
+            </form>
         </div>
-
-            Spinner to wait 5 seconds
-        <div class="loader">
-            <p>Am pornit motoarele!<br />Te rugam sa astepti o clipa</p>
-            <p>Rezultatul cautarii va apare curand.</p>
-            <div class="loading">
-            </div>
-        </div>
-
-        <div class="container">
-            <div class="row1">
-                <div class="col1">
-                    <table class="table-altex">
-                        <thead>
-                        <tr>
-                            <th scope="col1">Altex</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                            <tr th:each = "result: ${search_results}">
-                                <th th:text="${result.search_result_name}" scope="row"></th>
-                                <td th:text="${result.search_result_name}"></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <table class="table-flanco">
-                        <thead>
-                        <tr>
-                            <th scope="col1">Flanco</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                        </tr>
-                        </tbody>
-                    </table>
-
-        <h2>Users</h2>
-        <table border="1">
-            <tr>
-                <th>name</th>
-                <th>age</th>
-            </tr>
-            <tr th:each = "user: ${users}">
-                <td th:text="${user.name}">vasile</td>
-                <td th:text="${user.age}">45</td>
-            </tr>
-        </table> -->
     </main>
 </div>
-<!--
-<script>
-    setImageVisible(loader, visible)
-</script>
--->
 </body>
 </html>

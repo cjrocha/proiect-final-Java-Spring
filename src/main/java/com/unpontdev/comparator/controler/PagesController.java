@@ -82,4 +82,14 @@ public class PagesController {
         return "searchlists/mainlist";
     }
 
+    /**
+     * Shows product data generated after a search
+     * keyword provided by user
+     * @return - search-results page
+     */
+    @RequestMapping("/search-results")
+    public String showSearchResults(){
+        return "search-results";
+    }
+
 }

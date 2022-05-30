@@ -2,10 +2,6 @@ package com.unpontdev.comparator.controler;
 
 import com.unpontdev.comparator.entities.Product;
 import com.unpontdev.comparator.repositories.ProductRepository;
-import com.unpontdev.comparator.repositories.SearchRepository;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
@@ -21,11 +17,7 @@ import java.util.List;
  */
 @Controller
 public class ProductOrderController {
-    private static Logger logger = LoggerFactory.getLogger(ProductOrderController.class);
-    private ChromeDriver driver;
 
-    @Autowired
-    private SearchRepository searchTerms;
     @Autowired
     private ProductRepository productRepository;
 
