@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -33,8 +34,9 @@ public class FlancoScraper implements  Runnable{
         LocalDateTime now = LocalDateTime.now();
         Long termId = 0L;
         String termUrl = null;
-        List<SearchTerms> terms = searchTerms.findAllByOrderByIdDesc();
         boolean test = true;
+        List<SearchTerms> terms = searchTerms.findAllByOrderByIdDesc();
+        //obtain the url to crawl and the term that was searched
         for(SearchTerms term : terms){
             while(test){
                 if(term.getSource().equals("flanco")) {
@@ -45,7 +47,7 @@ public class FlancoScraper implements  Runnable{
                 }
             }
         }
-        //visit url and add product urls to a list
+        //visit url and add product urls to a list using follow pagination
         Browser pagesCatcherBrowser = new Browser(new ChromeDriver());
         pagesCatcherBrowser.visit(termUrl);
         List<String> prodDetUrl = new ArrayList<>();
@@ -65,14 +67,13 @@ public class FlancoScraper implements  Runnable{
         }
         pagesCatcherBrowser.close();
         //visit each product page and get data required
+        Product product = new Product();
         for (String prodUrl : prodDetUrl) {
-            Product product = new Product();
             Browser detBrowser = new Browser(new ChromeDriver());
             detBrowser.visit(prodUrl);
-            int stock;
             try {
                 //handle data
-                String price, oldPrice;
+                String stock, price, oldPrice;
                 try {
                     oldPrice = detBrowser.doc.findFirst("<div class=pricesPrp>").getElement(0).getElement(0).getElement(1).getText();
                     oldPrice = oldPrice.replace(".", "").split(" ")[0].trim();
@@ -83,15 +84,16 @@ public class FlancoScraper implements  Runnable{
                     price = price.replace(".", "").split(" ")[0].trim();
                     oldPrice = "0";
                 }
-                String sstock = detBrowser.doc.findFirst("<div class=stock>").getText();
-                if (!sstock.equals("In stock") || !sstock.equals("Stock limitat")) {
-                    stock = 1;
+                String sstock = detBrowser.doc.findFirst("<div class=product-info-main.right-wrapp>").getElement(0)
+                        .getElement(0).getElement(0).getElement(0).getElement(1).getText();
+                if (sstock.equals("In stock") || sstock.equals("Stock limitat")) {
+                    stock = "0";
                 } else {
-                    stock = 0;
+                    stock = "1";
                 }
                 String[] brands = detBrowser.doc.findFirst("<body id=html-body>").getElement(5).innerHTML().split(",");
                 String brand = brands[4].replace("bc:\"", "").replace("\"\n", "").replace("};", "").trim();
-                //handle process over
+                product.setpId(UUID.randomUUID().toString());
                 product.setProductName(detBrowser.doc.findFirst("<h1 class=page-title>").getText());
                 product.setProductUrl(detBrowser.getLocation());
                 product.setProductId(detBrowser.doc.findFirst("<div class=product-info-stock-sku>").getElement(0).getElement(1).getText());
@@ -103,7 +105,7 @@ public class FlancoScraper implements  Runnable{
                 } catch(NotFound nfd){
                     product.setProductDescription(detBrowser.doc.findFirst("<h1 class=page-title>").getText());
                 }
-                product.setProductStock(String.valueOf(stock));
+                product.setProductStock(stock);
                 product.setProductMainImage(detBrowser.doc.findFirst("<figure class=slick-slide.slick-current.slick-active>").getElement(0).getAttribute("href"));
                 product.setProductBrand(brand);
                 product.setProductSource("flanco");
@@ -111,13 +113,12 @@ public class FlancoScraper implements  Runnable{
                 product.setAddedOn(now);
                 productRepository.save(product);
                 detBrowser.close();
-
             } catch (NotFound nf) {
                 logger.error(Arrays.toString(nf.getStackTrace()) + ". One or more elements were not found!");
-                detBrowser.close();
+
             } catch (Exception e) {
                 logger.error(Arrays.toString(e.getStackTrace()) +"One element was broken!");
-                detBrowser.close();
+
             }
         }
         logger.info("Flanco scraper has ended!");

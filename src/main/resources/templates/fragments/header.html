@@ -17,7 +17,10 @@
                         <a class="nav-link" href="/login">Login</a>
                     </li>
                     <li sec:authorize="isAuthenticated()" class="nav-item">
-                        <a class="nav-link" th:href="@{/main-comparator}">Comparator</a>
+                        <a class="nav-link" th:href="@{/main-comparator}">Cauta</a>
+                    </li>
+                    <li sec:authorize="isAuthenticated()" class="nav-item">
+                        <a class="nav-link" th:href="@{/searchlists/mainlist}">Compara</a>
                     </li>
                     <li sec:authorize="isAuthenticated()" class="nav-item">
                         <a class="nav-link" href="/logout">Logout</a>

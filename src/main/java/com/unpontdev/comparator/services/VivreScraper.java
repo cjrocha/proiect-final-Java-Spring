@@ -14,7 +14,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -31,8 +33,9 @@ public class VivreScraper implements Runnable{
         LocalDateTime now = LocalDateTime.now();
         Long vTermId = 0L;
         String vTermUrl = null;
-        List<SearchTerms> terms = searchTerms.findAllByOrderByIdDesc();
         boolean test = true;
+        List<SearchTerms> terms = searchTerms.findAllByOrderByIdDesc();
+        //obtain the url to crawl and the term that was searched
         for (SearchTerms term : terms) {
             while (test) {
                 if (term.getSource().equals("vivre")) {
@@ -43,9 +46,9 @@ public class VivreScraper implements Runnable{
                 }
             }
         }
+        //visit url and add product urls to a list using follow pagination
         Browser newBrowser = new Browser(new ChromeDriver());
         newBrowser.visit(vTermUrl);
-        //String lUrl = newBrowser.getLocation();
         List<String> prodDetUrl = new ArrayList<>();
         boolean check = true;
         try {
@@ -53,7 +56,6 @@ public class VivreScraper implements Runnable{
                 Elements products = newBrowser.doc.findEach("<div class=item-product>");
                 for (Element product : products) {
                     String pUrl = product.findFirst("<h2 class=title>").getElement(0).getAttribute("href");
-                    String pName = product.findFirst("<h2 class=title>").getElement(0).getText();
                     prodDetUrl.add(pUrl);
                 }
                 String nextPage = newBrowser.doc.findFirst("<a aria-label=Go.to.next.page>").getAttribute("href");
@@ -63,11 +65,13 @@ public class VivreScraper implements Runnable{
             check = false;
         }
         newBrowser.close();
+        //visit each product page and get data required
+        Product product = new Product();
+
         for (String prodUrl : prodDetUrl) {
+            Browser detBrowser = new Browser(new ChromeDriver());
+            detBrowser.visit(prodUrl);
             try {
-                Product product = new Product();
-                Browser detBrowser = new Browser(new ChromeDriver());
-                detBrowser.visit(prodUrl);
                 String price, oldPrice;
                 try {
                     oldPrice = detBrowser.doc.findFirst("<span class=price.price-ref>").getElement(0).getText().replace("\n", ".");
@@ -79,6 +83,7 @@ public class VivreScraper implements Runnable{
                     oldPrice = "0";
                     price = price = detBrowser.doc.findFirst("<span class=price.price-product>").getElement(0).getText().replace("\n", ".");
                 }
+                product.setpId(UUID.randomUUID().toString());
                 product.setProductStock("1");
                 product.setProductName(detBrowser.doc.findFirst("<h1>").getText());
                 product.setProductUrl(detBrowser.getLocation());
@@ -99,7 +104,8 @@ public class VivreScraper implements Runnable{
                 productRepository.save(product);
                 detBrowser.close();
             } catch (NotFound nf){
-                logger.error(nf.getStackTrace()+". Some elemnts were not found.");
+
+                logger.error(Arrays.toString(nf.getStackTrace()) +". Some elemnts were not found.");
             }
         }
         logger.info("Vivre scraper has ended");

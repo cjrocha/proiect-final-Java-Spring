@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -33,8 +34,9 @@ public class AltexScraper implements  Runnable {
         LocalDateTime now = LocalDateTime.now();
         Long termId = 0L;
         String termUrl = null;
-        List<SearchTerms> terms = searchTerms.findAllByOrderByIdDesc();
         boolean test = true;
+        List<SearchTerms> terms = searchTerms.findAllByOrderByIdDesc();
+        //obtain the url to crawl and the term that was searched
         for (SearchTerms term : terms) {
             while (test) {
                 if (term.getSource().equals("altex")) {
@@ -54,18 +56,17 @@ public class AltexScraper implements  Runnable {
             entries = pagesCatcherBrowser.doc.findFirst("<div class=text-sm.font-medium.text-center.md:mt-2.py-2>").getText();
             nentries = Integer.parseInt(entries.split(" ")[2]);
         } catch (NotFound e) {
-            nentries = 0;
-            e.printStackTrace();
+            logger.error(Arrays.toString(e.getStackTrace()) +". Error when getting pages number");
         }
         pagesCatcherBrowser.close();
         int pages = nentries / 24 + 1;
         String url = "";
         if (pages > 2) {
-            url = termUrl + "?page=2";
+            url = termUrl + "?page=2";//cause of limited resources
         } else {
             url = termUrl;
         }
-        //visit product pages and get data
+        //visit url and put product urls into a list
         List<String> prodDetUrl = new ArrayList<>();
         Browser pagesNewCatcherBrowser = new Browser(new ChromeDriver());
         pagesNewCatcherBrowser.visit(url);
@@ -76,14 +77,15 @@ public class AltexScraper implements  Runnable {
                 String pUrl = product.findFirst("<a>").getAttribute("href");
                 prodDetUrl.add(pUrl);
             }
-            pagesNewCatcherBrowser.close();
         } catch (JauntiumException e) {
-            pagesNewCatcherBrowser.close();
+            logger.error("We have an exception from scraper library");
         }
+        pagesNewCatcherBrowser.close();
+        //gather products data
+        Product product = new Product();
         for (String pUrl : prodDetUrl) {
             Browser productCatcherBrowser = new Browser(new ChromeDriver());
             productCatcherBrowser.visit(pUrl);
-            Product product = new Product();
             try {
                 String stock = "";
                 try {
@@ -100,9 +102,10 @@ public class AltexScraper implements  Runnable {
                     price = forPrice.getElement(0).getElement(0).getText().replace(".", "").split(" ")[0].trim();;
                     oldPrice = "0";
                 }
+                product.setpId(UUID.randomUUID().toString());
                 product.setProductName(productCatcherBrowser.doc.findFirst("<div class=mb-1>").getElement(0).getText());
                 product.setProductSource("altex");
-                product.setProductBrand("");
+                product.setProductBrand(productCatcherBrowser.doc.findFirst("<main class=flow-root>").getElement(0).getAttribute("innerHTML").split("Thing\",\"name\":\"")[1].split("\"},\"image")[0]);
                 product.setProductUrl(productCatcherBrowser.getLocation());
                 product.setProductId(productCatcherBrowser.getLocation().split("/")[5]);
                 product.setProductSku(productCatcherBrowser.doc.findFirst("<div class=inline-block.p-1.text-xs.md:text-sm.font-semibold.rounded-sm.bg-gray-300>").getText().replace("Cod produs: ", ""));
@@ -115,10 +118,9 @@ public class AltexScraper implements  Runnable {
                 product.setTermId(termId);
                 productRepository.save(product);
                 productCatcherBrowser.close();
-
             } catch (NotFound nf) {
                 logger.error(Arrays.toString(nf.getStackTrace()) + ". One or more elements were not found!");
-                productCatcherBrowser.close();
+
             }
         }
         logger.info("Altex scraper has ended!");

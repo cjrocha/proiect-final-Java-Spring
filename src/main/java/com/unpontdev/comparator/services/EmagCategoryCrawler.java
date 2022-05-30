@@ -61,12 +61,13 @@ public class EmagCategoryCrawler implements Runnable{
                     j++;
                 } catch (Exception e) {
                     logger.error("Element not found!");
+
                 }
             }
             emagBrowser.close();
         } catch (NotFound e) {
             logger.error("Element not found!");
-            emagBrowser.close();
+
         }
     }
 

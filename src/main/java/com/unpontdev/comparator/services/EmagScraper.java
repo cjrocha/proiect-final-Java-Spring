@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -33,8 +34,9 @@ public class EmagScraper implements Runnable{
         LocalDateTime now = LocalDateTime.now();
         Long eTermId = 0L;
         String eTermUrl = null;
-        List<SearchTerms> terms = searchTerms.findAllByOrderByIdDesc();
         boolean test = true;
+        List<SearchTerms> terms = searchTerms.findAllByOrderByIdDesc();
+        //obtain the url to crawl and the term that was searched
         for (SearchTerms term : terms) {
             while (test) {
                 if (term.getSource().equals("emag")) {
@@ -45,7 +47,7 @@ public class EmagScraper implements Runnable{
                 }
             }
         }
-        //visit url and add product urls to a list
+        //visit url and add product urls to a list using follow pagination
         List<String> prodDetUrl = new ArrayList<>();
         boolean check = true;
         int s = 2;
@@ -69,11 +71,12 @@ public class EmagScraper implements Runnable{
             check = false;
         }
         productsCatcherBrowser.close();
+        //gather products data
+        Product product = new Product();
         for (String eProdUrl : prodDetUrl) {
+            Browser detailsBrowser = new Browser(new ChromeDriver());
+            detailsBrowser.visit(eProdUrl);
             try {
-                Browser detailsBrowser = new Browser(new ChromeDriver());
-                Product product = new Product();
-                detailsBrowser.visit(eProdUrl);
                 String price, oldPrice;
                 try {
                     oldPrice = detailsBrowser.doc.findFirst("<form class=main-product-form>").getElement(0).getElement(0).getElement(0).getElement(0).getElement(0).getText()
@@ -98,6 +101,7 @@ public class EmagScraper implements Runnable{
                 } catch (com.jauntium.NotFound e) {
                     description = detailsBrowser.doc.findFirst("<h1 class=page-title>").getText();
                 }
+                product.setpId(UUID.randomUUID().toString());
                 product.setProductName(detailsBrowser.doc.findFirst("<h1 class=page-title>").getText());
                 product.setProductUrl(detailsBrowser.getLocation());
                 product.setProductId(detailsBrowser.doc.findFirst("<form class=main-product-form>").getAttribute("data-product-id"));
@@ -120,10 +124,10 @@ public class EmagScraper implements Runnable{
                 detailsBrowser.close();
             } catch (NotFound ntf) {
                 logger.error(Arrays.toString(ntf.getStackTrace()) + ". Some elements were not found");
+
             }
         }
         logger.info("Emag scraper has ended");
-
     }
 
     @Override

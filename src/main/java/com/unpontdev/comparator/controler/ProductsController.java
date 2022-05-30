@@ -1,9 +1,9 @@
 package com.unpontdev.comparator.controler;
 
+import com.unpontdev.comparator.entities.Product;
 import com.unpontdev.comparator.entities.SearchTerms;
 import com.unpontdev.comparator.repositories.ProductRepository;
 import com.unpontdev.comparator.repositories.SearchRepository;
-import com.unpontdev.comparator.repositories.SearchResultRepository;
 import com.unpontdev.comparator.services.AltexScraper;
 import com.unpontdev.comparator.services.EmagScraper;
 import com.unpontdev.comparator.services.FlancoScraper;
@@ -21,10 +21,9 @@ import java.util.List;
 
 @Controller
 public class ProductsController {
-    private static Logger logger = LoggerFactory.getLogger(SearchController.class);
+    private static Logger logger = LoggerFactory.getLogger(ProductsController.class);
     private ChromeDriver driver;
-    @Autowired
-    private SearchResultRepository searchResultRepository;
+
     @Autowired
     private SearchRepository searchTerms;
     @Autowired
@@ -33,8 +32,8 @@ public class ProductsController {
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     public String showSearch(Model model) {
         List<SearchTerms> terms = searchTerms.findAllByOrderByIdDesc();
-        String query = terms.get(0).getTerm();
-        logger.info("Search term is: "+query);
+        model.addAttribute("keyword", terms.get(0).getTerm());
+        logger.info("Search term is: "+terms.get(0).getTerm());
         boolean a = false,f = false,e = false,v = false;
         for(int i=0; i<4; i++){
             if (terms.get(i).getSource().equals("altex")) a = true;
@@ -62,11 +61,27 @@ public class ProductsController {
             Thread vc = new Thread(vivreScraper);
             vc.start();
         }
-        model.addAttribute("keyword", query);
+        List<Product> products = productRepository.findAll();
+        model.addAttribute("products", products);
+        //List<Product> productsOrderByBrand = productRepository.findAll(Sort.by(Sort.Direction.DESC, "productBrand"));
+        //List<Product> productsOrderBySku = productRepository.findAll(Sort.by(Sort.Direction.ASC, "productSku"));
+        //List<Product> productsOrderByName = productRepository.findAll(Sort.by(Sort.Direction.ASC, "productName"));
+
+        //model.addAttribute("productsOrderByBrand", productsOrderByBrand);
+        //model.addAttribute("productsOrderBySku", productsOrderBySku);
+        //model.addAttribute("productsOrderByName", productsOrderByName);
+//        for(Product product : products){
+//            model.addAttribute("productName", product.getProductName());
+//            model.addAttribute("mainImage", product.getProductMainImage());
+//            model.addAttribute("productSKU", product.getProductSku());
+//            model.addAttribute("prodUrl", product.getProductUrl());
+//            model.addAttribute("productSource", product.getProductSource());
+//            model.addAttribute("productDate", product.getAddedOn());
+//            model.addAttribute("productOldPrice", product.getOldPrice());
+//            model.addAttribute("productPrice", product.getPrice());
+//            model.addAttribute("productBrand", product.getProductBrand());
+//            model.addAttribute("productStock", product.getProductStock());
+//        }
         return "search";
     }
-//    @RequestMapping(value = "/search", method = RequestMethod.GET)
-//    public String showProducts(Model model){
-//
-//        return "search";
 }

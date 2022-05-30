@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ProiectFinalApplication {
+public class ComparatorApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ProiectFinalApplication.class, args);
+		SpringApplication.run(ComparatorApplication.class, args);
 	}
 
 }

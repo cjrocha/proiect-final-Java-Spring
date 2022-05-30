@@ -8,5 +8,5 @@ import java.util.List;
 public interface SearchRepository extends JpaRepository<SearchTerms, String> {
     public SearchTerms findById(Long Id);
     public List<SearchTerms> findAllByOrderByIdDesc();
-    public List<SearchTerms> findAllByOrderByIdAsc();
+    //public List<SearchTerms> findAllByOrderByIdAsc();
 }

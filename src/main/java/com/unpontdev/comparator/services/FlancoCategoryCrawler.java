@@ -61,12 +61,12 @@ public class FlancoCategoryCrawler implements Runnable {
                     j++;
                 } catch (Exception e) {
                     logger.error("Element not found!");
+
                 }
             }
             flancoBrowser.close();
         } catch (NotFound ntf) {
             logger.error("Element not found!");
-            flancoBrowser.close();
         }
     }
         @Override

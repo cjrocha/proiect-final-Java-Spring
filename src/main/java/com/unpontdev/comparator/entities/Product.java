@@ -5,18 +5,15 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Set;
 
-import static javax.persistence.GenerationType.SEQUENCE;
-
 
 @Entity(name= "product")
 @Table(name="product")
 public class Product {
-    public static final String SEQUENCE_NAME = "MY_CLASS_id_seq";
+
 
     @Id
-    @GeneratedValue(strategy = SEQUENCE, generator = SEQUENCE_NAME)
-    @SequenceGenerator(name = SEQUENCE_NAME, sequenceName = SEQUENCE_NAME)
-    private Long id;
+    @Column(name="prod_id")
+    private String pId;
 
     private String productSource;
 
@@ -47,11 +44,11 @@ public class Product {
     @OneToMany(mappedBy = "products")
     private Set<ProductImages> productImages;
 
-    public Product(Long id, String productSource, String productName, String productUrl,
+    public Product(String id, String productSource, String productName, String productUrl,
                    String productId, String productStock, String productSku, String productMainImage,
                    String productDescription, String productBrand, Double price, Double oldPrice,
                    LocalDateTime addedOn, Long termId) {
-        this.id = id;
+        this.pId = id;
         this.productSource = productSource;
         this.productName = productName;
         this.productUrl = productUrl;
@@ -74,7 +71,7 @@ public class Product {
         if (this == o) return true;
         if (!(o instanceof Product)) return false;
         Product product = (Product) o;
-        return id.equals(product.id) && getProductSource().equals(product.getProductSource()) &&
+        return pId.equals(product.pId) && getProductSource().equals(product.getProductSource()) &&
                 getProductName().equals(product.getProductName()) &&
                 getProductUrl().equals(product.getProductUrl()) &&
                 getProductId().equals(product.getProductId()) &&
@@ -91,18 +88,18 @@ public class Product {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, getProductSource(), getProductName(), getProductUrl(),
+        return Objects.hash(pId, getProductSource(), getProductName(), getProductUrl(),
                 getProductId(), getProductStock(), getProductSku(), getProductMainImage(),
                 getProductDescription(), getProductBrand(), getPrice(), getOldPrice(),
                 getAddedOn(), termId, getProductImages());
     }
 
-    public Long getId() {
-        return id;
+    public String getpId() {
+        return pId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setpId(String pId) {
+        this.pId = pId;
     }
 
     public String getProductSource() {

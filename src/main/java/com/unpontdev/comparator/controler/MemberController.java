@@ -46,6 +46,26 @@ public class MemberController {
         return "search";
     }
 
+    @RequestMapping("/searchlists/orderbyname")
+    public String showSearchOrderByNamePage(){
+        return "searchlists/orderbyname";
+    }
+
+    @RequestMapping("/searchlists/orderbysku")
+    public String showSearchOrderBySkuPage(){
+        return "searchlists/orderbysku";
+    }
+
+    @RequestMapping("/searchlists/orderbybrand")
+    public String showSearchOrderByBrandPage(){
+        return "searchlists/orderbybrand";
+    }
+
+    @RequestMapping("/searchlists/mainlist")
+    public String showMainProductsListPage(){
+        return "searchlists/mainlist";
+    }
+
     @GetMapping("/register")
     public String registerForm(Model model){
         model.addAttribute("member", new Member());

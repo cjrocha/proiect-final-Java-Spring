@@ -61,12 +61,13 @@ public class VivreCategoryCrawler implements Runnable{
                     j++;
                 } catch (Exception e) {
                     logger.error("Element not found!");
+
                 }
             }
             vivreBrowser.close();
         } catch (NotFound e) {
             logger.error("Element not found!");
-            vivreBrowser.close();
+
         }
     }
 

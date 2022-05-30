@@ -13,6 +13,19 @@
 <body>
 <div layout:fragment="content" class="container text-center" >
     <main role="main" class="container">
+        <div class="header clearfix">
+            <nav>
+                <ul class="nav nav-pills float-right">
+                    <li class="nav-item">
+                        <a class="nav-link active" th:href="@{/despre}">Despre<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/termeni}">Termeni</a>
+                    </li>
+                </ul>
+            </nav>
+            <h3 class="text-muted"><img src="http://localhost:8085/media/Unpont-logo.png" height="90" width="300" style=""> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Product Comparator</h3>
+        </div>
         Acestia sunt termenii de folosire
     </main>
 </div>

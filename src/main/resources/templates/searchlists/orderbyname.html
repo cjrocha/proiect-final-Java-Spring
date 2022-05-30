@@ -1,0 +1,67 @@
+<!DOCTYPE HTML>
+<html xmlns:layout="http://www.w3.org/1999/xhtml" xmlns:th="http://www.springframework.org/schema/data/jaxb"
+      xmlns:sec="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{fragments/main_layout}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="UnPont Development - Product Comparator">
+    <meta name="author" content="@UnPont Development 2022">
+    <link rel="icon" th:href="@{/media/unpont-icon.ico}">
+    <title>UnPont Comparator Ordered Data</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+</head>
+<body>
+<main id="main-container" sec:authorize="isAuthenticated()" role="main" class="container" layout:fragment="content">
+    <div class="header clearfix">
+        <nav>
+            <ul class="nav nav-pills float-right">
+                <li class="nav-item">
+                    <a class="nav-link active" th:href="@{/despre}">Despre<span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/termeni}">Termeni</a>
+                </li>
+            </ul>
+        </nav>
+        <h3 class="text-muted"><img src="http://localhost:8085/media/Unpont-logo.png" height="90" width="300" style=""> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Product Comparator</h3>
+    </div>
+    <div id="data-table" class="table-container text-center p-3 mb-2 bg-warning text-dark" display="none">
+        <h1>Produse existente in comparator</h1>
+        <h4><em>Tabelul de mai jos contine produsele existente in comparatorul de produse.<br />
+            acest tabel este unul dinamic, ce se updateaza cu noile date primite.</em></h4>
+        <table class="products" style="height: 100%; width: 100%; border-collapse: collapse; border-style: solid; margin-left: auto; margin-right: auto;" border="1">
+            <thead class="ttop">
+            <tr>
+                <td style="width: 10%; text-align: center;"><em><strong>Check</strong></em></td>
+                <td style="width: 10%; text-align: center;"><em><strong>Img</strong></em></td>
+                <td style="width: 10%; text-align: center;"><em><strong><a class="btn btn-sort" th:href="@{/searchlists/orderbyname}">Nume</a></strong></em></td>
+                <td style="width: 10%; text-align: center;"><em><strong>Sursa</strong></em></td>
+                <td style="width: 10%; text-align: center;"><em><strong><a class="btn btn-sort" th:href="@{/searchlists/orderbysku}">SKU</a></strong></em></td>
+                <td style="width: 10%; text-align: center;"><em><strong>PRP</strong></em></td>
+                <td style="width: 10%; text-align: center;"><em><strong>Pret</strong></em></td>
+                <td style="width: 10%; text-align: center;"><em><strong>Stoc</strong></em></td>
+                <td style="width: 10%; text-align: center;"><em><strong><a class="btn btn-sort" th:href="@{/searchlists/orderbybrand}">Brand</a></strong></em></td>
+                <td style="width: 10%; text-align: center;"><em><strong>Data</strong></em></td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="product: ${productsOrderByName}" >
+                <td style="width: 3%;" th:text="${product.productId}"></td>
+                <td style="width: 10%;"><img th:src="@{${product.productMainImage}}" alt="prod" width="65px" height="65px" /></td>
+                <td style="width: 30%;"><a th:href="${product.productUrl}" th:text="${product.productName}"></a></td>
+                <td style="width: 5%;" th:text="${product.productSource}"></td>
+                <td style="width: 10%;" th:text="${product.productSku}"></td>
+                <td style="width: 8%;" th:text="${product.oldPrice}"></td>
+                <td style="width: 8%;" th:text="${product.price}"></td>
+                <td style="width: 5%;" th:text="${product.productStock}"></td>
+                <td style="width: 5%;" th:text="${product.productBrand}"></td>
+                <td style="width: 16%;" th:text="${product.addedOn}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+</body>
+</html>

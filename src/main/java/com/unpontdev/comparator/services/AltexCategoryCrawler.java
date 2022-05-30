@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -39,7 +40,7 @@ public class AltexCategoryCrawler implements  Runnable{
                 .filter(result -> source.equals(result.getSource())).toList();
         Long workingId = filteredList.get(0).getSearchID();
         String url = searchTerms.findById(workingId).getTermUrl();
-        Browser altexBrowser = new Browser(new ChromeDriver());
+        Browser altexBrowser = new Browser(driver);
         altexBrowser.visit(url);
         try {
             Element body = altexBrowser.doc.findFirst("<div id=catalog-filters-container>");
@@ -62,14 +63,14 @@ public class AltexCategoryCrawler implements  Runnable{
                 j++;
                 } catch (Exception e){
                     logger.error("Element not found!");
+
                 }
             }
             altexBrowser.close();
         }catch(NotFound env){
-            logger.error("Ne pare rau dar termenii cautarii nu aduc niciun rezultat! Motiv: " + env);
-            altexBrowser.close();
-        }
-        altexBrowser.quit();
+            logger.error("Ne pare rau dar termenii cautarii nu aduc niciun rezultat! Motiv: " + Arrays.toString(env.getStackTrace()));
+
+        };
     }
 
      @Override
