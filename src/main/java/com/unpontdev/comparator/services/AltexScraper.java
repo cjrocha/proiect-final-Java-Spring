@@ -18,6 +18,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * External source product scraper
+ * based on start url provided by category crawler.
+ * It's implementing runnable class in order to
+ * offer multi-threading capability.
+ */
 @Service
 @AllArgsConstructor
 public class AltexScraper implements  Runnable {
@@ -29,28 +35,41 @@ public class AltexScraper implements  Runnable {
     @Autowired
     private ProductRepository productRepository;
 
-
+    /**
+     * Category pages crawler and grabber of the number of listing pages.
+     * Crawler of listing pages and grabber of products data.
+     * Uses chrome driver, selenium and jauntium libraries,
+     * to visit the web pages and gather data needed.
+     * Based on search term provided by user, builds the search url,
+     * visits the page and grabs all pagination's, then moves to each paginated
+     * page and follows products links to access and grab the product data.
+     * Data gathered is being pushed to DB.
+     * Catches exceptions and handles them.
+     * Logs exceptions and success operations.
+     */
     public void AltScraper() {
         LocalDateTime now = LocalDateTime.now();
         Long termId = 0L;
         String termUrl = null;
         boolean test = true;
         List<SearchTerms> terms = searchTerms.findAllByOrderByIdDesc();
+
         //obtain the url to crawl and the term that was searched
         for (SearchTerms term : terms) {
             while (test) {
                 if (term.getSource().equals("altex")) {
                     termId = term.getSearchID();
                     termUrl = term.getTermUrl();
-                    logger.info("search_id is: " + termId + " The term url is: " + termUrl);
+                    logger.info("Id-ul de cautare este: " + termId + " si url-ul generat de acest id este: " + termUrl);
                     test = false;
                 }
             }
         }
+
         //visit url and get number of pages
         Browser pagesCatcherBrowser = new Browser(driver);
         pagesCatcherBrowser.visit(termUrl);
-        String entries = "0";
+        String entries;
         int nentries = 0;
         try {
             entries = pagesCatcherBrowser.doc.findFirst("<div class=text-sm.font-medium.text-center.md:mt-2.py-2>").getText();
@@ -60,12 +79,13 @@ public class AltexScraper implements  Runnable {
         }
         pagesCatcherBrowser.close();
         int pages = nentries / 24 + 1;
-        String url = "";
+        String url;
         if (pages > 2) {
             url = termUrl + "?page=2";//cause of limited resources
         } else {
             url = termUrl;
         }
+
         //visit url and put product urls into a list
         List<String> prodDetUrl = new ArrayList<>();
         Browser pagesNewCatcherBrowser = new Browser(new ChromeDriver());
@@ -81,6 +101,7 @@ public class AltexScraper implements  Runnable {
             logger.error("We have an exception from scraper library");
         }
         pagesNewCatcherBrowser.close();
+
         //gather products data
         Product product = new Product();
         for (String pUrl : prodDetUrl) {
@@ -120,12 +141,15 @@ public class AltexScraper implements  Runnable {
                 productCatcherBrowser.close();
             } catch (NotFound nf) {
                 logger.error(Arrays.toString(nf.getStackTrace()) + ". One or more elements were not found!");
-
             }
         }
-        logger.info("Altex scraper has ended!");
+        logger.info("Scraperul de produse de la Altex a terminat!");
     }
 
+    /**
+     * Override of run method to
+     * handle product scraper
+     */
     @Override
     public void run() {AltScraper();}
 }

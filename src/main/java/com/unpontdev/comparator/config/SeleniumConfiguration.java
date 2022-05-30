@@ -7,6 +7,11 @@ import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.PostConstruct;
 
+/**
+ * Configuration for web driver.
+ * Driver used is chromedriver, that resides in
+ * webDriver folder
+ */
 @Configuration
 public class SeleniumConfiguration{
 
@@ -15,6 +20,11 @@ public class SeleniumConfiguration{
         System.setProperty("webdriver.chrome.driver", "D:/Proiect_final/proiect-final/src/main/resources/static/webDriver/chromedriver.exe");
     }
 
+    /**
+     * Driver for selenium library
+     * using headless option.
+     * @return - chromedriver for app
+     */
     @Bean
     public ChromeDriver driver(){
         final ChromeOptions chromeOptions = new ChromeOptions();

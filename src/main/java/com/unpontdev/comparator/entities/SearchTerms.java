@@ -7,6 +7,11 @@ import java.util.Set;
 
 import static javax.persistence.GenerationType.SEQUENCE;
 
+/**
+ * Held's the search terms object.
+ * This data will be showed to admin users for analytical purposes.
+ * Implemented and data delivered to DB, but not yet served to admin users
+ */
 @Entity(name= "search_terms")
 @Table(name = "search_terms")
 public class SearchTerms implements Serializable {
@@ -31,25 +36,43 @@ public class SearchTerms implements Serializable {
     @OneToMany(mappedBy = "searchTerm")
     private Set<SearchResults> searchResults;
 
-    public SearchTerms(){}
-
+    /**
+     * Constructor for search terms object
+     * @param searchId
+     * @param term
+     * @param termUrl
+     * @param source
+     */
     public SearchTerms(Long searchId, String term, String termUrl, String source) {
         this.id = searchId;
         this.term = term;
         this.termUrl = termUrl;
         this.source = source;
     }
+    public SearchTerms(){}
 
+    /**
+     * Adds object to DB using repository
+     * @param result
+     */
     public void addSearchResult(SearchResults result) {
         searchResults.add(result);
         result.setSearchTerm(this);
     }
 
+    /**
+     * Removes object from DB using repository
+     * @param result
+     */
     public void removeSearchResult(SearchResults result) {
         searchResults.remove(result);
         result.setSearchTerm(null);
     }
 
+    /**
+     * Setters and getters for search term data
+     * @return
+     */
     public Long getSearchID() {
         return id;
     }
@@ -90,6 +113,10 @@ public class SearchTerms implements Serializable {
         this.searchResults = searchResults;
     }
 
+    /**
+     * Overiding toString methode to serve readable data
+     * @return - readable text
+     */
     @Override
     public String toString() {
         return "SearchTerms{" +

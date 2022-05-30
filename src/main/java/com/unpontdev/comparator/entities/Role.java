@@ -5,6 +5,11 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import java.util.List;
 
+/**
+ * Helds the members role object
+ * implemented but not used yet in the the web app.
+ * Will allow serving particular data to admin and/or member
+ */
 @Entity
 public class Role {
 
@@ -14,6 +19,10 @@ public class Role {
     @ManyToMany(mappedBy = "role")
     private List<Member> members;
 
+    /**
+     * constructor for member role
+     * @param name
+     */
     public Role(String name) {
         this.name = name;
     }
@@ -21,6 +30,10 @@ public class Role {
     public Role() {
     }
 
+    /**
+     * Setters and getters for role data
+     * @return
+     */
     public String getName() {
         return name;
     }

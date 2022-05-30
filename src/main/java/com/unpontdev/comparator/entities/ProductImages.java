@@ -4,6 +4,11 @@ import javax.persistence.*;
 
 import static javax.persistence.GenerationType.SEQUENCE;
 
+/**
+ * Helds the product additional images object
+ * Implemented but not used yet!
+ * Data for this object will come from scrapers
+ */
 @Entity
 public class ProductImages {
     public static final String SEQUENCE_NAME = "MY_CLASS_id_seq";
@@ -16,6 +21,11 @@ public class ProductImages {
     @ManyToOne
     private Product products;
 
+    /**
+     * Constructor for product images
+     * @param id
+     * @param imageUrl
+     */
     public ProductImages(Long id, String imageUrl) {
         this.id = id;
         this.imageUrl = imageUrl;
@@ -24,6 +34,9 @@ public class ProductImages {
     public ProductImages() {
     }
 
+    /**
+     * Setters and getters for product images data
+     */
     public Long getId() {
         return id;
     }

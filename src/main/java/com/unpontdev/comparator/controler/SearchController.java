@@ -19,6 +19,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import static com.unpontdev.comparator.util.SearchKeyGenerator.searchGenerator;
 
+/**
+ * Handles the data received from user and
+ * builds threads for each scraper
+ */
 @Controller
 public class SearchController {
     private static Logger logger = LoggerFactory.getLogger(SearchController.class);
@@ -27,6 +31,19 @@ public class SearchController {
     @Autowired
     private SearchResultRepository searchResults;
 
+    /**
+     * Handles the form page for
+     * scraping information required;
+     * Manages the threads that should run and redirects to
+     * 'search' page that contains product data in DB
+     * @param model - html handlers
+     * @param keyword - the term that is being searched on external sites
+     * @param altex - external site name - boolean value
+     * @param flanco - external site name - boolean value
+     * @param emag - external site name - boolean value
+     * @param vivre - external site name - boolean value
+     * @return - starts scrapers and redirect to products table page 'search'
+     */
     @RequestMapping(value = "/main-comparator", method = RequestMethod.POST)
     public String searchForm(Model model,
                              @RequestParam("keyword") String keyword,
@@ -40,58 +57,72 @@ public class SearchController {
         model.addAttribute("flanco", flanco);
         model.addAttribute("emag", emag);
         model.addAttribute("vivre", vivre);
+
+        handlersForThreads(keyword, altex, flanco, emag, vivre);
+        return "redirect:search";
+    }
+
+    /**
+     * handles the start of each scraper thread base on user input
+     * @param keyword - the term that is being searched on external sites
+     * @param altex - external site name - boolean value
+     * @param flanco - external site name - boolean value
+     * @param emag - external site name - boolean value
+     * @param vivre - external site name - boolean value
+     * Logs scraper started and term searched
+     */
+    public void handlersForThreads(String keyword, Boolean altex, Boolean flanco, Boolean emag, Boolean vivre){
         if(altex == true){
             String mainUrl ="https://altex.ro/cauta/?q=";
             String urlToCrawl = searchGenerator(mainUrl, keyword);
-            SearchTerms newsearchTerms = new SearchTerms();
-            newsearchTerms.setTerm(keyword);
-            newsearchTerms.setTermUrl(urlToCrawl);
-            newsearchTerms.setSource("altex");
-            searchTerms.save(newsearchTerms);
+            SearchTerms newSearchTerms = new SearchTerms();
+            newSearchTerms.setTerm(keyword);
+            newSearchTerms.setTermUrl(urlToCrawl);
+            newSearchTerms.setSource("altex");
+            searchTerms.save(newSearchTerms);
             AltexCategoryCrawler acc = new AltexCategoryCrawler(new ChromeDriver(), searchTerms, searchResults);
             Thread altexSearchThread = new Thread(acc);
             altexSearchThread.start();
-            logger.info("termenii de cautare pe site-ul altex.ro au fost salvati in DB");
+            logger.info("Scraperul a pornit. Vizitam acum siteul altex.ro.\nSuntem in cautarea a: "+keyword);
         }
         if(flanco == true){
             String mainUrl ="https://www.flanco.ro/catalogsearch/result/?q=";
             String urlToCrawl = searchGenerator(mainUrl, keyword);
-            SearchTerms newsearchTerms = new SearchTerms();
-            newsearchTerms.setTerm(keyword);
-            newsearchTerms.setTermUrl(urlToCrawl);
-            newsearchTerms.setSource("flanco");
-            searchTerms.save(newsearchTerms);
+            SearchTerms newSearchTerms = new SearchTerms();
+            newSearchTerms.setTerm(keyword);
+            newSearchTerms.setTermUrl(urlToCrawl);
+            newSearchTerms.setSource("flanco");
+            searchTerms.save(newSearchTerms);
             FlancoCategoryCrawler fcc = new FlancoCategoryCrawler(new ChromeDriver(), searchTerms, searchResults);
             Thread flancoSearchThread = new Thread(fcc);
             flancoSearchThread.start();
-            logger.info("termenii de cautare pe site-ul flanco.ro au fost salvati in DB");
+            logger.info("Scraperul a pornit. Vizitam acum siteul flanco.ro.\nSuntem in cautarea a: "+keyword);
         }
         if(emag == true){
             String mainUrl ="https://www.emag.ro/search/";
             String urlToCrawl = searchGenerator(mainUrl, keyword);
-            SearchTerms newsearchTerms = new SearchTerms();
-            newsearchTerms.setTerm(keyword);
-            newsearchTerms.setTermUrl(urlToCrawl);
-            newsearchTerms.setSource("emag");
-            searchTerms.save(newsearchTerms);
+            SearchTerms newSearchTerms = new SearchTerms();
+            newSearchTerms.setTerm(keyword);
+            newSearchTerms.setTermUrl(urlToCrawl);
+            newSearchTerms.setSource("emag");
+            searchTerms.save(newSearchTerms);
             EmagCategoryCrawler ecc = new EmagCategoryCrawler(new ChromeDriver(), searchTerms, searchResults);
             Thread emagSearchThread = new Thread(ecc);
             emagSearchThread.start();
-            logger.info("termenii de cautare pe site-ul emag.ro au fost salvati in DB");
+            logger.info("Scraperul a pornit. Vizitam acum siteul emag.ro.\nSuntem in cautarea a: "+keyword);
         }
         if(vivre == true){
             String mainUrl ="https://www.vivre.ro/search?searchItem=";
             String urlToCrawl = searchGenerator(mainUrl, keyword);
-            SearchTerms newsearchTerms = new SearchTerms();
-            newsearchTerms.setTerm(keyword);
-            newsearchTerms.setTermUrl(urlToCrawl);
-            newsearchTerms.setSource("vivre");
-            searchTerms.save(newsearchTerms);
+            SearchTerms newSearchTerms = new SearchTerms();
+            newSearchTerms.setTerm(keyword);
+            newSearchTerms.setTermUrl(urlToCrawl);
+            newSearchTerms.setSource("vivre");
+            searchTerms.save(newSearchTerms);
             VivreCategoryCrawler vcc = new VivreCategoryCrawler(new ChromeDriver(), searchTerms, searchResults);
             Thread vivreSearchThread = new Thread(vcc);
             vivreSearchThread.start();
-            logger.info("termenii de cautare pe site-ul vivre.ro au fost salvati in DB");
+            logger.info("Scraperul a pornit. Vizitam acum siteul vivre.ro.\nSuntem in cautarea a: "+keyword);
         }
-        return "redirect:search";
     }
 }

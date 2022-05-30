@@ -18,6 +18,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * External source product scraper
+ * based on start url provided by category crawler.
+ * It's implementing runnable class in order to
+ * offer multi-threading capability.
+ */
 @Service
 @AllArgsConstructor
 public class EmagScraper implements Runnable{
@@ -29,13 +35,25 @@ public class EmagScraper implements Runnable{
     @Autowired
     private ProductRepository productRepository;
 
-
+    /**
+     * Category pages crawler and grabber of the number of listing pages.
+     * Crawler of listing pages and grabber of products data.
+     * Uses chrome driver, selenium and jauntium libraries,
+     * to visit the web pages and gather data needed.
+     * Based on search term provided by user, builds the search url,
+     * visits the page and follows all pagination's, then moves to each paginated
+     * page and follows products links to access and grab the product data.
+     * Data gathered is being pushed to DB.
+     * Catches exceptions and handles them.
+     * Logs exceptions and success operations.
+     */
     public void EmgScraper() {
         LocalDateTime now = LocalDateTime.now();
         Long eTermId = 0L;
         String eTermUrl = null;
         boolean test = true;
         List<SearchTerms> terms = searchTerms.findAllByOrderByIdDesc();
+
         //obtain the url to crawl and the term that was searched
         for (SearchTerms term : terms) {
             while (test) {
@@ -47,6 +65,7 @@ public class EmagScraper implements Runnable{
                 }
             }
         }
+
         //visit url and add product urls to a list using follow pagination
         List<String> prodDetUrl = new ArrayList<>();
         boolean check = true;
@@ -71,6 +90,7 @@ public class EmagScraper implements Runnable{
             check = false;
         }
         productsCatcherBrowser.close();
+
         //gather products data
         Product product = new Product();
         for (String eProdUrl : prodDetUrl) {
@@ -127,9 +147,13 @@ public class EmagScraper implements Runnable{
 
             }
         }
-        logger.info("Emag scraper has ended");
+        logger.info("Scraperul de produse Emag a terminat treaba");
     }
 
+    /**
+     * Override of run method to
+     * handle product scraper
+     */
     @Override
     public void run() {
         EmgScraper();

@@ -5,7 +5,9 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Set;
 
-
+/**
+ * Helds the product object
+ */
 @Entity(name= "product")
 @Table(name="product")
 public class Product {
@@ -44,6 +46,22 @@ public class Product {
     @OneToMany(mappedBy = "products")
     private Set<ProductImages> productImages;
 
+    /** constructor for product object
+     * @param id
+     * @param productSource
+     * @param productName
+     * @param productUrl
+     * @param productId
+     * @param productStock
+     * @param productSku
+     * @param productMainImage
+     * @param productDescription
+     * @param productBrand
+     * @param price
+     * @param oldPrice
+     * @param addedOn
+     * @param termId
+     */
     public Product(String id, String productSource, String productName, String productUrl,
                    String productId, String productStock, String productSku, String productMainImage,
                    String productDescription, String productBrand, Double price, Double oldPrice,
@@ -65,6 +83,11 @@ public class Product {
 ;
     }
     public Product(){}
+
+    /**Overiding equals and hashCode methods
+     * @param o
+     * @return
+     */
 
     @Override
     public boolean equals(Object o) {
@@ -94,6 +117,10 @@ public class Product {
                 getAddedOn(), termId, getProductImages());
     }
 
+    /**
+     * Setter and getters for product data
+     * @return
+     */
     public String getpId() {
         return pId;
     }

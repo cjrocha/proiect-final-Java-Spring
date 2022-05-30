@@ -5,6 +5,11 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.util.Objects;
 
+/**
+ * Held's the search results object(urls and pages name).
+ * This data will be showed to admin users for analytical purposes.
+ * Implemented and data delivered to DB, but not yet served to admin users
+ */
 @Entity(name = "search_results")
 @Table(name = "search_results")
 public class SearchResults {
@@ -21,14 +26,26 @@ public class SearchResults {
     @ManyToOne
     private SearchTerms searchTerm;
 
-    public SearchResults(){}
-
+    /**
+     * Constyructor for search results object
+     * @param ID
+     * @param resultName
+     * @param resultUrl
+     */
     public SearchResults(String ID, String resultName, String resultUrl) {
         this.id = ID;
         this.resultName = resultName;
         this.resultUrl = resultUrl;
     }
 
+    public SearchResults(){}
+
+    /**
+     * Overiding equals and hashCode
+     * for filtering and sorting purposes
+     * @param o
+     * @return
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -42,6 +59,9 @@ public class SearchResults {
         return Objects.hash(id);
     }
 
+    /**
+     * Setters and getters for search results data
+     */
     public String getID() {
         return id;
     }

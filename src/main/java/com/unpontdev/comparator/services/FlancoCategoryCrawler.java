@@ -17,6 +17,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * External source category scraper
+ * based on term provided by user.
+ * It's implementing runnable class in order to
+ * offer multi-threading capability.
+ */
 @Service
 @AllArgsConstructor
 public class FlancoCategoryCrawler implements Runnable {
@@ -28,6 +34,16 @@ public class FlancoCategoryCrawler implements Runnable {
     @Autowired
     private SearchResultRepository searchResults;
 
+    /**
+     * Category crawler and grabber.
+     * Uses chrome driver, selenium and jauntium libraries,
+     * to visit the web pages and gather data needed.
+     * Based on search term provided by user, builds the search url,
+     * visits the page and grabs subcategory urls.
+     * Data gathered is being pushed to DB.
+     * Catches exceptions and handles them.
+     * Logs exceptions and success operations.
+     */
     public void FlnCategoryScraper()  {
         int j = 1;
         String cName;
@@ -61,16 +77,20 @@ public class FlancoCategoryCrawler implements Runnable {
                     j++;
                 } catch (Exception e) {
                     logger.error("Element not found!");
-
                 }
             }
             flancoBrowser.close();
         } catch (NotFound ntf) {
             logger.error("Element not found!");
         }
+        logger.info("Rezultatul cautarii a fost salvat in DB");
     }
-        @Override
-        public void run() {
+    /**
+     * Override of run method to
+     * handle category scraper
+     */
+    @Override
+    public void run() {
             FlnCategoryScraper();
         }
-    }
+}

@@ -8,10 +8,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
 
+/**
+ * Handling the member login and register
+ * pages
+ */
 @Controller
 public class MemberController {
 
@@ -21,56 +24,33 @@ public class MemberController {
     @Autowired
     MemberRepository memberRepository;
 
+    /**
+     * Apeals the login page / form
+     * @return - login form
+     */
     @GetMapping("/login")
     public String showLoginForm(){
         return "views/loginForm";
     }
 
-    @GetMapping("/despre")
-    public String showAboutPage(){
-        return "despre";
-    }
-
-    @GetMapping("/termeni")
-    public String showTermsPage(){
-        return "termeni";
-    }
-
-    @RequestMapping("/main-comparator")
-    public String showComparatorMainPage(){
-        return "main-comparator";
-    }
-
-    @RequestMapping("/search")
-    public String showSearchPage(){
-        return "search";
-    }
-
-    @RequestMapping("/searchlists/orderbyname")
-    public String showSearchOrderByNamePage(){
-        return "searchlists/orderbyname";
-    }
-
-    @RequestMapping("/searchlists/orderbysku")
-    public String showSearchOrderBySkuPage(){
-        return "searchlists/orderbysku";
-    }
-
-    @RequestMapping("/searchlists/orderbybrand")
-    public String showSearchOrderByBrandPage(){
-        return "searchlists/orderbybrand";
-    }
-
-    @RequestMapping("/searchlists/mainlist")
-    public String showMainProductsListPage(){
-        return "searchlists/mainlist";
-    }
-
+    /**
+     * Apeals the register page / form
+     * @param model - html data
+     * @return - register form
+     */
     @GetMapping("/register")
     public String registerForm(Model model){
         model.addAttribute("member", new Member());
         return "views/registerForm";
     }
+
+    /**
+     * Showing register page
+     * and handling pages if user is already registered
+     * @param member - member object data
+     * @param model - html handler
+     * @return - register or login page
+     */
     @PostMapping("/register")
     public String registerMember(@Valid Member member, Model model){
         String email = member.getEmail();

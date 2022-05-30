@@ -5,6 +5,9 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
+/**
+ * Helds the members object
+ */
 @Entity
 public class Member {
 
@@ -29,6 +32,13 @@ public class Member {
             @JoinColumn(name = "ROLE_NAME", referencedColumnName = "name") })
     private List<Role> role;
 
+    /**
+     * Members constructor
+     * @param email
+     * @param firstName
+     * @param lastName
+     * @param password
+     */
     public Member(String email, String firstName, String lastName, String password ) {
         this.email = email;
         this.firstName = firstName;
@@ -39,6 +49,9 @@ public class Member {
     public Member() {
     }
 
+    /**
+     * Setters and getters for member data
+     */
     public String getEmail() {
         return email;
     }

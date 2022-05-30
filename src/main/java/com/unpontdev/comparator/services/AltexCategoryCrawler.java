@@ -18,7 +18,12 @@ import org.springframework.stereotype.Service;
 import java.util.Arrays;
 import java.util.List;
 
-
+/**
+ * External source category scraper
+ * based on term provided by user.
+ * It's implementing runnable class in order to
+ * offer multi-threading capability.
+ */
 @Service
 @AllArgsConstructor
 public class AltexCategoryCrawler implements  Runnable{
@@ -30,6 +35,16 @@ public class AltexCategoryCrawler implements  Runnable{
     @Autowired
     private SearchResultRepository searchResults;
 
+    /**
+     * Category crawler and grabber.
+     * Uses chrome driver, selenium and jauntium libraries,
+     * to visit the web pages and gather data needed.
+     * Based on search term provided by user, builds the search url,
+     * visits the page and grabs subcategory urls.
+     * Data gathered is being pushed to DB.
+     * Catches exceptions and handles them.
+     * Logs exceptions and success operations.
+     */
     public void AltcategoryScraper()  {
         int j = 1;
         String cName;
@@ -62,18 +77,21 @@ public class AltexCategoryCrawler implements  Runnable{
                 searchResults.save(searchFilters);
                 j++;
                 } catch (Exception e){
-                    logger.error("Element not found!");
-
+                    logger.error("Some elements were not found");
                 }
             }
+            logger.info("Rezultatul cautarii a fost salvat in DB");
             altexBrowser.close();
         }catch(NotFound env){
-            logger.error("Ne pare rau dar termenii cautarii nu aduc niciun rezultat! Motiv: " + Arrays.toString(env.getStackTrace()));
-
-        };
+            logger.error("We are sorry but the search terms did not return any valid entry! Reason: " + Arrays.toString(env.getStackTrace()));
+        }
     }
 
-     @Override
+    /**
+     * Override of run method to
+     * handle category scraper
+     */
+    @Override
     public void run() {
         AltcategoryScraper();
     }

@@ -16,7 +16,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
+/**
+ * External source category scraper
+ * based on term provided by user.
+ * It's implementing runnable class in order to
+ * offer multi-threading capability.
+ */
 @Service
 @AllArgsConstructor
 public class EmagCategoryCrawler implements Runnable{
@@ -28,6 +33,16 @@ public class EmagCategoryCrawler implements Runnable{
     @Autowired
     private SearchResultRepository searchResults;
 
+    /**
+     * Category crawler and grabber.
+     * Uses chrome driver, selenium and jauntium libraries,
+     * to visit the web pages and gather data needed.
+     * Based on search term provided by user, builds the search url,
+     * visits the page and grabs subcategory urls.
+     * Data gathered is being pushed to DB.
+     * Catches exceptions and handles them.
+     * Logs exceptions and success operations.
+     */
     public void EmgCategoryScraper()  {
         int j = 1;
         String cName;
@@ -61,17 +76,19 @@ public class EmagCategoryCrawler implements Runnable{
                     j++;
                 } catch (Exception e) {
                     logger.error("Element not found!");
-
                 }
             }
             emagBrowser.close();
         } catch (NotFound e) {
             logger.error("Element not found!");
-
         }
+        logger.info("Rezultatul cautarii a fost salvat in DB");
     }
 
-
+    /**
+     * Override of run method to
+     * handle category scraper
+     */
     @Override
     public void run() {
         EmgCategoryScraper();

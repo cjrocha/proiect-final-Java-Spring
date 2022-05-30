@@ -19,6 +19,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.List;
 
+/**
+ * Taking care of data scrapers and building
+ * response page for users
+ */
 @Controller
 public class ProductsController {
     private static Logger logger = LoggerFactory.getLogger(ProductsController.class);
@@ -29,6 +33,14 @@ public class ProductsController {
     @Autowired
     private ProductRepository productRepository;
 
+    /**
+     * Starts scrapers requested by user in different
+     * threads and
+     * serves the products in DB page for users
+     * @param model - html handlers
+     * @return - search page - products in DB
+     * logs the search term requested and thread running
+     */
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     public String showSearch(Model model) {
         List<SearchTerms> terms = searchTerms.findAllByOrderByIdDesc();
@@ -63,25 +75,6 @@ public class ProductsController {
         }
         List<Product> products = productRepository.findAll();
         model.addAttribute("products", products);
-        //List<Product> productsOrderByBrand = productRepository.findAll(Sort.by(Sort.Direction.DESC, "productBrand"));
-        //List<Product> productsOrderBySku = productRepository.findAll(Sort.by(Sort.Direction.ASC, "productSku"));
-        //List<Product> productsOrderByName = productRepository.findAll(Sort.by(Sort.Direction.ASC, "productName"));
-
-        //model.addAttribute("productsOrderByBrand", productsOrderByBrand);
-        //model.addAttribute("productsOrderBySku", productsOrderBySku);
-        //model.addAttribute("productsOrderByName", productsOrderByName);
-//        for(Product product : products){
-//            model.addAttribute("productName", product.getProductName());
-//            model.addAttribute("mainImage", product.getProductMainImage());
-//            model.addAttribute("productSKU", product.getProductSku());
-//            model.addAttribute("prodUrl", product.getProductUrl());
-//            model.addAttribute("productSource", product.getProductSource());
-//            model.addAttribute("productDate", product.getAddedOn());
-//            model.addAttribute("productOldPrice", product.getOldPrice());
-//            model.addAttribute("productPrice", product.getPrice());
-//            model.addAttribute("productBrand", product.getProductBrand());
-//            model.addAttribute("productStock", product.getProductStock());
-//        }
         return "search";
     }
 }
