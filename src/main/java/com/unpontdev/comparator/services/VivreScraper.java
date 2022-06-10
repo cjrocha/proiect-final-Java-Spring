@@ -115,7 +115,7 @@ public class VivreScraper implements Runnable{
                 try {
                     product.setProductDescription(detBrowser.doc.findFirst("<div class=product-sections>").getElement(0).getElement(1).getText());
                 } catch (ArrayIndexOutOfBoundsException ar){
-                    product.setProductDescription(detBrowser.doc.findFirst("<div class=product-sections>").getElement(5).getElement(1).getText());
+                    product.setProductDescription(detBrowser.doc.findFirst("<h1>").getText());
                 }
                 product.setProductMainImage(detBrowser.doc.findFirst("<img loading=eager>").getAttribute("src"));
                 product.setProductBrand(detBrowser.doc.findFirst("<li class=list-inline-item>").getElement(1).getText());
