@@ -1,5 +1,6 @@
 # proiect-final
-Comparator produse
+Comparator produse foloseste java, Spring, Selenium, javascript.
+
 Acest program permite compararea datelor aceluiasi tip produse de la diferiti comercianti in idea in care este necesara compararea preturilor si/sau 
 specificatiilor produselor sau update-ul datelor deja existente despre un produs (pret, imagini, descriere, etc.) in baza de date.
 Idee:
